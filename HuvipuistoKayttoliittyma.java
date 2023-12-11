@@ -139,18 +139,20 @@ public class HuvipuistoKayttoliittyma extends JFrame {
             kokonaismyynnit.createNewFile();
 
             FileWriter kirjoittaja = new FileWriter("Kokonaismyynnit.txt");
-            BufferedWriter lisaaja = new BufferedWriter(kirjoittaja);
+            //BufferedWriter lisaaja = new BufferedWriter(kirjoittaja);
 
-            lisaaja.write("Lisätty");
-            lisaaja.close();
+
 
             LocalDate paivaMaara = LocalDate.now();
             LocalTime aika = LocalTime.now();
-            Int laskuri = 0;
-            String kokonaisTulostus = "Kokonaismyyntitilanne \n" + paivaMaara + " " + aika + "\n" + laskuri;
+            Int laskuri = 1;
+            String laskuriTeksti = Integer(laskuri).toString();
+            String kokonaisTulostus = "Kokonaismyyntitilanne \n" + paivaMaara + " " + aika + "\n" + laskuriTeksti;
 
             kirjoittaja.write(kokonaisTulostus);
+            //lisaaja.write("Lisatty");
             kirjoittaja.close();
+            //lisaaja.close();
 
             if(kokonaismyynnit.createNewFile()){
                 System.out.println("Kokonaismyyntituloste on luotu: " + kokonaismyynnit.getName());
