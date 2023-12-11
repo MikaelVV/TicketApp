@@ -38,7 +38,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
 
                 if(e.getSource()==normaaliButton){
                     normaaliButton.setEnabled(false);
-                    Int normaaliHinta = 22;
+                    int normaaliHinta = 22;
                     Kokonaismyynnit.laskuri += normaaliHinta;
                 }
             }
@@ -51,7 +51,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
             public void actionPerformed(ActionEvent e){
                 if(e.getSource()==lastenButton){
                     lastenButton.setEnabled(false);
-                    Int lastenHinta = 15;
+                    int lastenHinta = 15;
                     Kokonaismyynnit.laskuri += lastenHinta;
                 }
             }
@@ -157,7 +157,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
 
             LocalDate paivaMaara = LocalDate.now();
             LocalTime aika = LocalTime.now();
-            Int laskuri = 0;
+            int laskuri = 0;
             String laskuriTeksti = Integer.toString(laskuri);
             String kokonaisTulostus = "Kokonaismyyntitilanne \n" + paivaMaara + " " + aika + "\n" + laskuriTeksti;
 
