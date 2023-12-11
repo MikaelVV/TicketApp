@@ -1,11 +1,18 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class HuvipuistoKayttoliittyma extends JFrame {
-    private JTextField lapsenNimi;
-    private JTextField huoltajanNumero;
-    private JComboBox<String> alennusRyhmaComboBox;
+    private static JTextField lapsenNimi;
+    private static JTextField huoltajanNumero;
+    private static JComboBox<String> alennusRyhmaComboBox;
 
     public HuvipuistoKayttoliittyma() {
         setTitle("Huvipuiston Rannekesovellus");
@@ -43,6 +50,13 @@ public class HuvipuistoKayttoliittyma extends JFrame {
         JButton tulostaButton = new JButton("Tulosta");
         tulostaButton.setPreferredSize(new Dimension(80, 30));
         add(tulostaButton);
+        tulostaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                Kuitti();
+            }
+        });
+
 
         JButton ostaButton = new JButton("Osta");
         ostaButton.setPreferredSize(new Dimension(80, 30));
@@ -53,5 +67,27 @@ public class HuvipuistoKayttoliittyma extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new HuvipuistoKayttoliittyma());
+    }
+
+    private static void Kuitti(){
+        try{
+            File myObj = new File("C:\\Huvipuistolipukkeet.txt");
+            
+            String lapsenNimitxt = lapsenNimi.getText();
+            String huoltajanNumerotxt = huoltajanNumero.getText();
+
+            String tulostus = "<form>" + "<label>" + lapsenNimitxt + "/label>" + "<label>" + huoltajanNumerotxt + "/label>" + "</form>";
+
+            myObj.write(tulostus.getBytes(StandardCharsets.UTF_8));
+            if(myObj.createNewFile()){
+                System.out.println("Lippukuitti on luotu: " + myObj.getName());
+                System.out.println("Tiedosto polku: " + myObj.getAbsolutePath());
+            }else{
+                System.out.println("Lippu on luotu jo.");
+            }
+        } catch (IOException e){
+            System.out.println("Lippukuittia luodessa tapahtui virhe.");
+            e.printStackTrace();
+        }
     }
 }
