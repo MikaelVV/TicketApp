@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.Integer;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import java.util.Scanner;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,19 +22,25 @@ public class HuvipuistoKayttoliittyma extends JFrame {
     private static JTextField huoltajanNumero;
     private static JComboBox<String> alennusRyhmaComboBox;
 
+
     public HuvipuistoKayttoliittyma() {
         setTitle("Huvipuiston Rannekesovellus");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 550);
         setLayout(new GridLayout(3, 2));
 
+
         JButton normaaliButton = new JButton("<html>Normaali<br>Hinta: 22€</html>");
         normaaliButton.setPreferredSize(new Dimension(120, 60));
         normaaliButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                int normaaliHinta = 22;
-                boolean normaaliValinta = true;
+
+                if(e.getSource()==normaaliButton){
+                    normaaliButton.setEnabled(false);
+                    Int normaaliHinta = 22;
+                    Kokonaismyynnit.laskuri += normaaliHinta;
+                }
             }
         });
 
@@ -41,8 +49,11 @@ public class HuvipuistoKayttoliittyma extends JFrame {
         lastenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                int lastenHinta = 15;
-                boolean lapsiValinta = true;
+                if(e.getSource()==lastenButton){
+                    lastenButton.setEnabled(false);
+                    Int lastenHinta = 15;
+                    Kokonaismyynnit.laskuri += lastenHinta;
+                }
             }
         });
 
@@ -97,6 +108,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new HuvipuistoKayttoliittyma());
+
     }
 
     private static void Kuitti(){
@@ -139,20 +151,20 @@ public class HuvipuistoKayttoliittyma extends JFrame {
             kokonaismyynnit.createNewFile();
 
             FileWriter kirjoittaja = new FileWriter("Kokonaismyynnit.txt");
-            //BufferedWriter lisaaja = new BufferedWriter(kirjoittaja);
+            BufferedWriter lisaaja = new BufferedWriter(kirjoittaja);
 
 
 
             LocalDate paivaMaara = LocalDate.now();
             LocalTime aika = LocalTime.now();
-            Int laskuri = 1;
-            String laskuriTeksti = Integer(laskuri).toString();
+            Int laskuri = 0;
+            String laskuriTeksti = Integer.toString(laskuri);
             String kokonaisTulostus = "Kokonaismyyntitilanne \n" + paivaMaara + " " + aika + "\n" + laskuriTeksti;
 
             kirjoittaja.write(kokonaisTulostus);
-            //lisaaja.write("Lisatty");
+            lisaaja.write("Lisatty");
             kirjoittaja.close();
-            //lisaaja.close();
+            lisaaja.close();
 
             if(kokonaismyynnit.createNewFile()){
                 System.out.println("Kokonaismyyntituloste on luotu: " + kokonaismyynnit.getName());
