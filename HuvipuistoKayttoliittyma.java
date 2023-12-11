@@ -1,7 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.text.SimpleDateFormat;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Scanner;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -22,8 +28,22 @@ public class HuvipuistoKayttoliittyma extends JFrame {
 
         JButton normaaliButton = new JButton("<html>Normaali<br>Hinta: 22€</html>");
         normaaliButton.setPreferredSize(new Dimension(120, 60));
-        JButton lastenButton = new JButton("<html>Lasten<br>Hinta: 26€</html>");
+        normaaliButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                int normaaliHinta = 22;
+            }
+        });
+
+        JButton lastenButton = new JButton("<html>Lasten<br>Hinta: 15€</html>");
         lastenButton.setPreferredSize(new Dimension(120, 60));
+        lastenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                int lastenHinta = 15;
+            }
+        });
+
         JButton alennusButton = new JButton("<html>Alennus<br>Hinta: 20€</html>");
         alennusButton.setPreferredSize(new Dimension(120, 60));
 
@@ -71,19 +91,31 @@ public class HuvipuistoKayttoliittyma extends JFrame {
 
     private static void Kuitti(){
         try{
-            File myObj = new File("C:\\Huvipuistolipukkeet.txt");
-            
-            String lapsenNimitxt = lapsenNimi.getText();
-            String huoltajanNumerotxt = huoltajanNumero.getText();
+            // Luodaan lipukkeiden tekstitiedosto.
+            File myObj = new File("Huvipuistolipukkeet.txt");
+            myObj.createNewFile();
 
-            String tulostus = "<form>" + "<label>" + lapsenNimitxt + "/label>" + "<label>" + huoltajanNumerotxt + "/label>" + "</form>";
+            //Luodaan kirjoittaja, jolla päästään kirjoittamaan tekstitiedostoon tekstiä.
+            FileWriter kirjoittaja = new FileWriter("Huvipuistolipukkeet.txt");
 
-            myObj.write(tulostus.getBytes(StandardCharsets.UTF_8));
+            // Määritellään tämänhetkinen päivämäärä ja kellon aika.
+            LocalDate paivaMaara = LocalDate.now();
+            LocalTime aika = LocalTime.now();
+
+            String lapsenNimiteksti = lapsenNimi.getText();
+            String huoltajanNumeroteksti = huoltajanNumero.getText();
+
+            String tulostus = "Kuitti\n" + paivaMaara + " "+ aika + "\nLapsen nimi: " + lapsenNimiteksti + "\nHuoltajan puhelin numero: "+ huoltajanNumeroteksti;
+
+            kirjoittaja.write(tulostus);
+            kirjoittaja.close();
+
             if(myObj.createNewFile()){
                 System.out.println("Lippukuitti on luotu: " + myObj.getName());
                 System.out.println("Tiedosto polku: " + myObj.getAbsolutePath());
             }else{
                 System.out.println("Lippu on luotu jo.");
+                System.out.println("Tiedosto polku: " + myObj.getAbsolutePath());
             }
         } catch (IOException e){
             System.out.println("Lippukuittia luodessa tapahtui virhe.");
