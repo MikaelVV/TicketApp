@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -7,7 +8,6 @@ import java.time.LocalTime;
 import java.text.SimpleDateFormat;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Scanner;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -32,6 +32,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 int normaaliHinta = 22;
+                boolean normaaliValinta = true;
             }
         });
 
@@ -41,6 +42,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 int lastenHinta = 15;
+                boolean lapsiValinta = true;
             }
         });
 
@@ -74,6 +76,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 Kuitti();
+                Kokonaismyynnit();
             }
         });
 
@@ -81,6 +84,13 @@ public class HuvipuistoKayttoliittyma extends JFrame {
         JButton ostaButton = new JButton("Osta");
         ostaButton.setPreferredSize(new Dimension(80, 30));
         add(ostaButton);
+        ostaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                Kokonaismyynnit();
+                Kuitti();
+            }
+        });
 
         setVisible(true);
     }
@@ -92,8 +102,8 @@ public class HuvipuistoKayttoliittyma extends JFrame {
     private static void Kuitti(){
         try{
             // Luodaan lipukkeiden tekstitiedosto.
-            File myObj = new File("Huvipuistolipukkeet.txt");
-            myObj.createNewFile();
+            File kuitti = new File("Huvipuistolipukkeet.txt");
+            kuitti.createNewFile();
 
             //Luodaan kirjoittaja, jolla päästään kirjoittamaan tekstitiedostoon tekstiä.
             FileWriter kirjoittaja = new FileWriter("Huvipuistolipukkeet.txt");
@@ -110,16 +120,49 @@ public class HuvipuistoKayttoliittyma extends JFrame {
             kirjoittaja.write(tulostus);
             kirjoittaja.close();
 
-            if(myObj.createNewFile()){
-                System.out.println("Lippukuitti on luotu: " + myObj.getName());
-                System.out.println("Tiedosto polku: " + myObj.getAbsolutePath());
+            if(kuitti.createNewFile()){
+                System.out.println("Lippukuitti on luotu: " + kuitti.getName());
+                System.out.println("Tiedosto polku: " + kuitti.getAbsolutePath());
             }else{
                 System.out.println("Lippu on luotu jo.");
-                System.out.println("Tiedosto polku: " + myObj.getAbsolutePath());
+                System.out.println("Tiedosto polku: " + kuitti.getAbsolutePath());
             }
         } catch (IOException e){
             System.out.println("Lippukuittia luodessa tapahtui virhe.");
             e.printStackTrace();
         }
     }
+
+    private static void Kokonaismyynnit(){
+        try{
+            File kokonaismyynnit = new File("Kokonaismyynnit.txt");
+            kokonaismyynnit.createNewFile();
+
+            FileWriter kirjoittaja = new FileWriter("Kokonaismyynnit.txt");
+            BufferedWriter lisaaja = new BufferedWriter(kirjoittaja);
+
+            lisaaja.write("Lisätty");
+            lisaaja.close();
+
+            LocalDate paivaMaara = LocalDate.now();
+            LocalTime aika = LocalTime.now();
+            Int laskuri = 0;
+            String kokonaisTulostus = "Kokonaismyyntitilanne \n" + paivaMaara + " " + aika + "\n" + laskuri;
+
+            kirjoittaja.write(kokonaisTulostus);
+            kirjoittaja.close();
+
+            if(kokonaismyynnit.createNewFile()){
+                System.out.println("Kokonaismyyntituloste on luotu: " + kokonaismyynnit.getName());
+                System.out.println("Tiedosto polku: " + kokonaismyynnit.getAbsolutePath());
+            }else{
+                System.out.println("Kokonaismyyntituloste on luotu jo.");
+                System.out.println("Tiedosto polku: " + kokonaismyynnit.getAbsolutePath());
+            }
+        }catch(IOException e){
+            System.out.println("Kokonaismyyntitulostetta luodessa tapahtui virhe.");
+            e.printStackTrace();
+        }
+    }
+
 }
