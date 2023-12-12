@@ -183,7 +183,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                 String kokonaisTulostus = "Kokonaismyyntitilanne \n" + paivaMaara + " " + aika + "\n" + laskuriTeksti;
 
                 kirjoittaja.write(kokonaisTulostus);
-                lisaaja.write("Lisatty");
+                lisaaja.write(" euroa");
             }
         } catch (IOException e) {
             System.out.println("Kokonaismyyntitulostetta luodessa tapahtui virhe.");
