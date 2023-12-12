@@ -75,7 +75,8 @@ public class HuvipuistoKayttoliittyma extends JFrame {
         add(huoltajanNumero);
 
         TitledBorder alennusRyhmaBorder = BorderFactory.createTitledBorder("Valitse alennusryhmä");
-        alennusRyhmaComboBox = new JComboBox<>(new String[] { "Opiskelija", "Eläkeläinen", "Varusmies" });
+        String alennukset[] = {"Ei alennusta", "Opiskelija", "Eläkeläinen", "Varusmies"};
+        alennusRyhmaComboBox = new JComboBox<>(alennukset);
         alennusRyhmaComboBox.setBorder(alennusRyhmaBorder);
         add(alennusRyhmaComboBox);
 
