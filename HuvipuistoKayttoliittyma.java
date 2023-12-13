@@ -22,6 +22,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
     private static JComboBox<String> alennusRyhmaComboBox;
     private static JButton normaaliButton;
     private static JButton lastenButton;
+    private static JTextArea liputTextArea;
 
     public HuvipuistoKayttoliittyma() {
         setTitle("Huvipuiston Rannekesovellus");
@@ -41,6 +42,9 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                     float vero1 = 5.28f;
                     Kokonaismyynnit.laskuri += normaaliHinta;
                     Kokonaismyynnit.laskuri += vero1;
+
+                    // Lisää liputTextAreaan
+                    lisaaLippu("Normaali", lippujenMaara, normaaliHinta);
                 }
             }
         });
@@ -57,20 +61,46 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                     float vero = 3.6f;
                     Kokonaismyynnit.laskuri += lastenHinta;
                     Kokonaismyynnit.laskuri += vero;
+
+                    // Lisää liputTextAreaan
+                    lisaaLippu("Lapset", lippujenMaara, lastenHinta);
                 }
             }
         });
 
         JButton alennusButton = new JButton("<html>Alennus<br>Hinta: 20€</html>");
         alennusButton.setPreferredSize(new Dimension(120, 60));
+        alennusButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == alennusButton) {
+                    int lippujenMaara = kysyLippujenMaara();
+                    alennusButton.setEnabled(false);
+                    int alennusHinta = 20 * lippujenMaara;
+                    float alv = 4.8f;
+                    Kokonaismyynnit.laskuri += alennusHinta;
+                    Kokonaismyynnit.laskuri += alv;
 
+                    // Lisää liputTextAreaan
+                    lisaaLippu("Alennus", lippujenMaara, alennusHinta);
+                }
+            }
+        });
+        add(alennusButton);
         add(normaaliButton);
         add(lastenButton);
         add(alennusButton);
 
+        // JTextArea lipuille
+        liputTextArea = new JTextArea();
+        liputTextArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(liputTextArea);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Valitut liput"));
+        add(scrollPane);
+
         lapsenNimi = new JTextField();
         lapsenNimi.setPreferredSize(new Dimension(100, 30));
-        lapsenNimi.setBorder(BorderFactory.createTitledBorder("Lapsen etunimi"));
+        lapsenNimi.setBorder(BorderFactory.createTitledBorder("Lapsen etunimi:"));
 
         huoltajanNumero = new JTextField();
         huoltajanNumero.setPreferredSize(new Dimension(150, 30));
@@ -80,7 +110,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
         add(huoltajanNumero);
 
         TitledBorder alennusRyhmaBorder = BorderFactory.createTitledBorder("Valitse alennusryhmä");
-        String alennukset[] = {"Ei alennusta", "Opiskelija", "Eläkeläinen", "Varusmies"};
+        String alennukset[] = { "Ei alennusta", "Opiskelija", "Eläkeläinen", "Varusmies" };
         alennusRyhmaComboBox = new JComboBox<>(alennukset);
         alennusRyhmaComboBox.setBorder(alennusRyhmaBorder);
         add(alennusRyhmaComboBox);
@@ -98,9 +128,13 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                 // Nollaa napit ja tekstikentät
                 normaaliButton.setEnabled(true);
                 lastenButton.setEnabled(true);
+                alennusButton.setEnabled(true);
                 lapsenNimi.setText("");
                 huoltajanNumero.setText("");
                 alennusRyhmaComboBox.setSelectedIndex(0);
+
+                // Tyhjennä liputTextArea
+                liputTextArea.setText("");
             }
         });
 
@@ -130,6 +164,17 @@ public class HuvipuistoKayttoliittyma extends JFrame {
         return 0;
     }
 
+    // Lisää liput textareaan
+    private void lisaaLippu(String tyyppi, int maara, int hinta) {
+        String alennusRyhma = (String) alennusRyhmaComboBox.getSelectedItem();
+        liputTextArea.append(tyyppi + ": " + maara + " kpl, Hinta: " + hinta + "€\n");
+
+        // Näytä alennusryhmä vain, jos se on valittu
+        if (!"Ei alennusta".equals(alennusRyhma)) {
+            liputTextArea.append(alennusRyhma + "\n");
+        }
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new HuvipuistoKayttoliittyma());
     }
@@ -156,9 +201,12 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                 String lapsenNimiteksti = lapsenNimi.getText();
                 String huoltajanNumeroteksti = huoltajanNumero.getText();
                 String laskuriTeksti = Integer.toString(Kokonaismyynnit.laskuri);
+                String alennusRyhma = (String) alennusRyhmaComboBox.getSelectedItem();
 
                 String tulostus = "Kuitti\n" + paivaMaara + " " + aika + "\nLapsen nimi: " + lapsenNimiteksti
-                        + "\nHuoltajan puhelin numero: " + huoltajanNumeroteksti + "\nHinta: " + laskuriTeksti + "\nalv24% sisaltyy hintaan";
+                        + "\nHuoltajan puhelin numero: " + huoltajanNumeroteksti + "\nAlennusryhmä: " + alennusRyhma
+                        + "\nHinta: " + laskuriTeksti
+                        + "\nalv24% sisaltyy hintaan";
 
                 kirjoittaja.write(tulostus);
             }
@@ -198,11 +246,11 @@ public class HuvipuistoKayttoliittyma extends JFrame {
         }
     }
 
-    private static void Paivanmyynnit(){
-        try{
+    private static void Paivanmyynnit() {
+        try {
             File paivanmyynnit = new File("Paivanmyynnit.txt");
 
-            if(paivanmyynnit.createNewFile()){
+            if (paivanmyynnit.createNewFile()) {
                 System.out.println("Paivanmyyntituloste on luotu: " + paivanmyynnit.getName());
                 System.out.println("Tiedosto polku: " + paivanmyynnit.getAbsolutePath());
             } else {
@@ -210,15 +258,16 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                 System.out.println("Tiedosto polku: " + paivanmyynnit.getAbsolutePath());
             }
 
-            try(PrintWriter lisaaja = new PrintWriter(new FileWriter(paivanmyynnit, true))){
+            try (PrintWriter lisaaja = new PrintWriter(new FileWriter(paivanmyynnit, true))) {
 
                 LocalDate paivaMaara = LocalDate.now();
                 String laskuriTeksti = Integer.toString(Kokonaismyynnit.laskuri);
-                lisaaja.append("\nMyynnit\n" + paivaMaara + "\n" + laskuriTeksti + "\n" + " --------------------------");
+                lisaaja.append(
+                        "\nMyynnit\n" + paivaMaara + "\n" + laskuriTeksti + "\n" + " --------------------------");
                 lisaaja.close();
             }
 
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Paivanmyyntitulostetta luodessa tapahtui virhe.");
             e.printStackTrace();
         }
