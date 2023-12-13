@@ -93,6 +93,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Kuitti();
                 Kokonaismyynnit();
+                Paivanmyynnit();
 
                 // Nollaa napit ja tekstikentät
                 normaaliButton.setEnabled(true);
@@ -209,10 +210,14 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                 System.out.println("Tiedosto polku: " + paivanmyynnit.getAbsolutePath());
             }
 
-            PrintWriter lisaaja = new PrintWriter(new FileWriter(paivanmyynnit, true));
-            lisaaja.append("testi");
-            lisaaja.close();
-            
+            try(PrintWriter lisaaja = new PrintWriter(new FileWriter(paivanmyynnit, true))){
+
+                LocalDate paivaMaara = LocalDate.now();
+                String laskuriTeksti = Integer.toString(Kokonaismyynnit.laskuri);
+                lisaaja.append("\nMyynnit\n" + paivaMaara + "\n" + laskuriTeksti + "\n" + " --------------------------");
+                lisaaja.close();
+            }
+
         } catch (IOException e){
             System.out.println("Paivanmyyntitulostetta luodessa tapahtui virhe.");
             e.printStackTrace();
