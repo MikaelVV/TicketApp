@@ -2,6 +2,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import javax.swing.*;
@@ -192,6 +193,28 @@ public class HuvipuistoKayttoliittyma extends JFrame {
             }
         } catch (IOException e) {
             System.out.println("Kokonaismyyntitulostetta luodessa tapahtui virhe.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void Paivanmyynnit(){
+        try{
+            File paivanmyynnit = new File("Paivanmyynnit.txt");
+
+            if(paivanmyynnit.createNewFile()){
+                System.out.println("Paivanmyyntituloste on luotu: " + paivanmyynnit.getName());
+                System.out.println("Tiedosto polku: " + paivanmyynnit.getAbsolutePath());
+            } else {
+                System.out.println("Paivanmyyntituloste on luotu jo.");
+                System.out.println("Tiedosto polku: " + paivanmyynnit.getAbsolutePath());
+            }
+
+            PrintWriter lisaaja = new PrintWriter(new FileWriter(paivanmyynnit, true));
+            lisaaja.append("testi");
+            lisaaja.close();
+            
+        } catch (IOException e){
+            System.out.println("Paivanmyyntitulostetta luodessa tapahtui virhe.");
             e.printStackTrace();
         }
     }
