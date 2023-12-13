@@ -37,7 +37,9 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                     int lippujenMaara = kysyLippujenMaara();
                     normaaliButton.setEnabled(false);
                     int normaaliHinta = 22 * lippujenMaara;
+                    float vero1 = 5.28f;
                     Kokonaismyynnit.laskuri += normaaliHinta;
+                    Kokonaismyynnit.laskuri -= vero1;
                 }
             }
         });
@@ -51,7 +53,9 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                     int lippujenMaara = kysyLippujenMaara();
                     lastenButton.setEnabled(false);
                     int lastenHinta = 15 * lippujenMaara;
+                    float vero = 3.6f;
                     Kokonaismyynnit.laskuri += lastenHinta;
+                    Kokonaismyynnit.laskuri -= vero;
                 }
             }
         });
@@ -149,9 +153,10 @@ public class HuvipuistoKayttoliittyma extends JFrame {
 
                 String lapsenNimiteksti = lapsenNimi.getText();
                 String huoltajanNumeroteksti = huoltajanNumero.getText();
+                String laskuriTeksti = Integer.toString(Kokonaismyynnit.laskuri);
 
                 String tulostus = "Kuitti\n" + paivaMaara + " " + aika + "\nLapsen nimi: " + lapsenNimiteksti
-                        + "\nHuoltajan puhelin numero: " + huoltajanNumeroteksti;
+                        + "\nHuoltajan puhelin numero: " + huoltajanNumeroteksti + "\nHinta: " + laskuriTeksti + "\nalv24% sisältyy hintaan";
 
                 kirjoittaja.write(tulostus);
             }
