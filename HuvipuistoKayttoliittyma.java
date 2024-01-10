@@ -204,7 +204,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                 String alennusRyhma = (String) alennusRyhmaComboBox.getSelectedItem();
 
                 String tulostus = "Kuitti\n" + paivaMaara + " " + aika + "\nLapsen nimi: " + lapsenNimiteksti
-                        + "\nHuoltajan puhelin numero: " + huoltajanNumeroteksti + "\nAlennusryhmä: " + alennusRyhma
+                        + "\nHuoltajan puhelin numero: " + huoltajanNumeroteksti + "\nAlennusryhma: " + alennusRyhma
                         + "\nHinta: " + laskuriTeksti
                         + "\nalv24% sisaltyy hintaan";
 
@@ -263,7 +263,7 @@ public class HuvipuistoKayttoliittyma extends JFrame {
                 LocalDate paivaMaara = LocalDate.now();
                 String laskuriTeksti = Integer.toString(Kokonaismyynnit.laskuri);
                 lisaaja.append(
-                        "\nMyynnit\n" + paivaMaara + "\n" + laskuriTeksti + "\n" + " --------------------------");
+                        "\nMyynnit\n" + paivaMaara + "\n" + laskuriTeksti + " " + "euroa" + "\n" + " --------------------------");
                 lisaaja.close();
             }
 
